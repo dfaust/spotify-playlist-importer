@@ -1,5 +1,3 @@
-use regex::Regex;
-
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 
@@ -70,29 +68,35 @@ impl Track {
     }
 
     pub fn query(&self) -> String {
-        let whitespaces = Regex::new(r"\s+").unwrap();
-        whitespaces
-            .replace_all(
-                format!(
-                    "{} {}",
-                    self.artist.as_deref().unwrap_or_default(),
-                    self.title.as_deref().unwrap_or_default()
-                )
-                .trim(),
-                " ",
+        let whitespaces = js_sys::RegExp::new(r"\s+", "");
+        js_sys::JsString::from(
+            format!(
+                "{} {}",
+                self.artist.as_deref().unwrap_or_default(),
+                self.title.as_deref().unwrap_or_default()
             )
-            .into_owned()
+            .trim()
+            .to_owned(),
+        )
+        .replace_by_pattern(&whitespaces, " ")
+        .into()
     }
 
     pub fn adjusted_query(&self) -> String {
-        let brackets = Regex::new(r"[\(\[].*[\)\]]").unwrap();
-        let artist = brackets.replace_all(self.artist.as_deref().unwrap_or_default(), "");
-        let title = brackets.replace_all(self.title.as_deref().unwrap_or_default(), "");
+        let brackets = js_sys::RegExp::new(r"[\(\[].*[\)\]]", "");
+        let artist = String::from(
+            js_sys::JsString::from(self.artist.as_deref().unwrap_or_default())
+                .replace_by_pattern(&brackets, ""),
+        );
+        let title = String::from(
+            js_sys::JsString::from(self.title.as_deref().unwrap_or_default())
+                .replace_by_pattern(&brackets, ""),
+        );
 
-        let whitespaces = Regex::new(r"\s+").unwrap();
-        whitespaces
-            .replace_all(format!("{} {}", artist, title).trim(), " ")
-            .into_owned()
+        let whitespaces = js_sys::RegExp::new(r"\s+", "");
+        js_sys::JsString::from(format!("{} {}", artist, title).trim().to_owned())
+            .replace_by_pattern(&whitespaces, " ")
+            .into()
     }
 
     pub fn similarity(&self, other: &Track) -> f64 {
@@ -155,8 +159,9 @@ impl Track {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use wasm_bindgen_test::*;
 
-    #[test]
+    #[wasm_bindgen_test]
     fn query() {
         let track = Track {
             artist: Some("Artist".to_string()),
@@ -167,7 +172,7 @@ mod tests {
         assert_eq!("Artist Title", track.query());
     }
 
-    #[test]
+    #[wasm_bindgen_test]
     fn adjusted_query() {
         let track = Track {
             artist: Some("Artist [Top]".to_string()),
