@@ -1,0 +1,157 @@
+$background: #ececec;
+$light-grey: #aeaeae;
+$dark-grey: #404040;
+$green: #1db954;
+$red: #fd3232;
+
+body {
+  background: $background;
+}
+
+a {
+  text-decoration: none;
+  color: darken($green, 15);
+
+  &:hover {
+    text-decoration: underline;
+    color: $green;
+  }
+}
+
+main {
+  margin: 32px;
+}
+
+.error {
+  color: $red;
+  background-color: lighten($background, 10);
+  border-radius: 4px;
+  padding: 8px;
+  font-weight: bold;
+  margin: 32px 0;
+  box-shadow: 0 0 2px $dark-grey;
+}
+
+.success {
+  color: darken($green, 15);
+  font-weight: bold;
+}
+
+table {
+  margin: 16px 0;
+}
+
+th {
+  text-align: left;
+}
+
+th,
+td {
+  padding-right: 16px;
+  white-space: nowrap;
+  max-width: 500px;
+  overflow: hidden;
+
+  &.right {
+    text-align: right;
+  }
+}
+
+.inline {
+  display: inline;
+  margin-left: 16px;
+}
+
+.form {
+  font-weight: bold;
+}
+
+.status {
+  font-size: smaller;
+}
+
+button {
+  color: white;
+  background-color: $dark-grey;
+  border: 0;
+  border-radius: 1000px;
+  padding: 8px 32px;
+  margin-right: 16px;
+  font-weight: bold;
+
+  &:hover {
+    background-color: lighten($dark-grey, 10);
+  }
+
+  &:active {
+    background-color: darken($dark-grey, 10);
+  }
+
+  &:disabled {
+    background-color: $light-grey;
+  }
+
+  &.main {
+    background-color: $green;
+    border: 0;
+
+    &:hover {
+      background-color: lighten($green, 10);
+    }
+
+    &:active {
+      background-color: darken($green, 10);
+    }
+
+    &:disabled {
+      background-color: $light-grey;
+    }  
+  }
+}
+
+select {
+  background-color: $background;
+  border: 1px solid $light-grey;
+  border-radius: 4px;
+
+  &.playlist {
+    padding: 8px;
+    font-weight: bold;
+  }
+
+  &.track {
+    padding: 4px;
+    width: 500px;
+  }
+}
+
+input[type="file"] {
+  font-weight: bold;
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: 4px;
+  border-radius: 50%;
+  border: 3px solid $dark-grey;
+  border-color: $dark-grey transparent $dark-grey transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
